@@ -1,6 +1,6 @@
 #include <iostream>
-#include <fstream>
 #include <string>
+#include <fstream>
 #include <boost/asio.hpp>
 
 using namespace boost::asio;
@@ -12,19 +12,20 @@ std::string read_html_file(const std::string& filename) {
         std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
         return content;
     } else {
-        return "Error 404";
+        return "File not found!";
     }
 }
 
 int main() {
     io_service io;
 
-// Change the port to 8081
-tcp::endpoint endpoint(tcp::v4(), 8081);
-
+    // Create a TCP endpoint to listen on port 8080
+    tcp::endpoint endpoint(tcp::v4(), 8080);
 
     // Create an acceptor to listen for incoming connections
     tcp::acceptor acceptor(io, endpoint);
+
+    std::cout << "WebWeaver is running on port 8080." << std::endl;
 
     while (true) {
         // Create a socket to represent the incoming connection
@@ -33,8 +34,8 @@ tcp::endpoint endpoint(tcp::v4(), 8081);
         // Wait for and accept an incoming connection
         acceptor.accept(socket);
 
-        // Read the content of your HTML file (replace "your_html_file.html" with your file path)
-        std::string html_content = read_html_file("your_html_file.html");
+        // Read the content of the "index.html" file
+        std::string html_content = read_html_file("html/index.html");
 
         // Generate an HTTP response with the HTML content
         std::string response = "HTTP/1.1 200 OK\r\n";
